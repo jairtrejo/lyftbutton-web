@@ -1,0 +1,7 @@
+.env
+.tern-port
+dist/*
+node_modules
+styles.css
+data/*
+cloudformation/packaged*.*

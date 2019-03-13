@@ -1,0 +1,149 @@
+{
+  "name": "lyftbutton",
+  "version": "0.0.0",
+  "description": "A web app for managing a lyft dash button",
+  "main": "dist/bundle.min.js",
+  "scripts": {
+    "build:html": "cp public/index.html dist && asset-cache-bust --asset-root dist dist/index.html",
+    "build:js": "NODE_ENV=production browserify src/app.js | terser -cm > dist/bundle.js",
+    "build:css": "lessc --clean-css src/styles/index.less dist/styles.css",
+    "build": "npm run build:css && npm run build:js && npm run build:html",
+    "deploy": "./scripts/deploy.sh",
+    "watch:css": "onchange 'src/styles/**/*.less' -- npm run build:css",
+    "start": "NODE_ENV=development npm run build:css && budo src/app.js:bundle.js --live=*.{css} --pushstate --dir public -- -p livereactload",
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jairtrejo/lyftbutton-web.git"
+  },
+  "author": "Jair Trejo <jair@jairtrejo.mx> (http://jairtrejo.mx)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jairtrejo/lyftbutton-web/issues"
+  },
+  "homepage": "https://github.com/jairtrejo/lyftbutton-web#readme",
+  "ava": {
+    "require": [
+      "babel-register",
+      "./test/_setup.js"
+    ],
+    "babel": "inherit"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": "last 2 versions"
+          },
+          "useBuiltIns": true
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-async-generator-functions",
+      "transform-class-properties",
+      "transform-object-rest-spread",
+      "transform-runtime"
+    ],
+    "env": {
+      "development": {
+        "plugins": [
+          [
+            "react-transform",
+            {
+              "transforms": [
+                {
+                  "transform": "livereactload/babel-transform",
+                  "imports": [
+                    "react"
+                  ]
+                }
+              ]
+            }
+          ]
+        ]
+      },
+      "test": {
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "node": "current"
+              }
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "browserify": {
+    "transform": [
+      "babelify",
+      "cssify",
+      "envify",
+      "localenvify",
+      [
+        "react-transform-svgify",
+        {
+          "default": "icon"
+        }
+      ],
+      [
+        "uglifyify",
+        {
+          "exts": ".js"
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "classnames": "^2.2.5",
+    "js-cookie": "^2.2.0",
+    "lodash": "^4.17.11",
+    "mitt": "^1.1.3",
+    "page": "^1.7.1",
+    "prop-types": "^15.5.10",
+    "qs": "^6.6.0",
+    "react": "^15.1.0",
+    "react-bem-helper": "^1.4.1",
+    "react-dom": "^15.1.0"
+  },
+  "devDependencies": {
+    "asset-cache-bust": "^2.2.0",
+    "ava": "^1.2.1",
+    "babel-plugin-react-transform": "^3.0.0",
+    "babel-plugin-transform-async-generator-functions": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.5.0",
+    "babel-register": "^6.9.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "budo": "^11.6.1",
+    "cssify": "^1.0.2",
+    "envify": "^3.4.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-15": "^1.0.5",
+    "eslint": "^5.14.1",
+    "less": "^3.8.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "livereactload": "^3.4.0",
+    "localenvify": "^1.0.1",
+    "onchange": "^5.2.0",
+    "prettier": "1.16.4",
+    "react-proxy": "^1.1.8",
+    "react-test-renderer": "^15.6.2",
+    "react-transform-svgify": "^2.1.0",
+    "terser": "^3.8.1",
+    "uglifyify": "^5.0.1",
+    "watchify": "^3.11.1"
+  }
+}
