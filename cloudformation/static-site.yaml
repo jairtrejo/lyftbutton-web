@@ -38,6 +38,7 @@ Resources:
       DistributionConfig:
         Enabled: true
         DefaultRootObject: index.html
+        HttpVersion: http2
         Origins:
           - DomainName: !GetAtt SiteBucket.DomainName
             Id: !Ref SiteBucket
